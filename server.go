@@ -8,11 +8,17 @@ import (
 func PlayerServer(w http.ResponseWriter, r *http.Request) {
 	player := r.URL.Path[len("/players/"):]
 
-	if player == "Pepper" {
-		_, _ = fmt.Fprint(w, "20")
+	_, _ = fmt.Fprint(w, GetPlayerScore(player))
+}
+
+func GetPlayerScore(name string) string {
+	if name == "Pepper" {
+		return "20"
 	}
 
-	if player == "Floyd" {
-		_, _ = fmt.Fprint(w, "10")
+	if name == "Floyd" {
+		return "10"
 	}
+
+	return ""
 }
