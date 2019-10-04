@@ -2,13 +2,20 @@ package main
 
 import (
 	"io"
-	"strings"
+	"io/ioutil"
+	"os"
 	"testing"
 )
 
 func TestFileSystemStore(t *testing.T) {
+	initialData := `[
+            {"Name": "Cleo", "Wins": 10},
+            {"Name": "Christopher", "Wins": 33}]`
+
 	t.Run("/league from a reader", func(t *testing.T) {
-		database := newDatabase()
+		database, cleanDatabase := createTempFile(t, initialData)
+		defer cleanDatabase()
+
 		store := FileSystemPlayerStore{database}
 
 		got := store.GetLeague()
@@ -25,7 +32,9 @@ func TestFileSystemStore(t *testing.T) {
 	})
 
 	t.Run("get player score", func(t *testing.T) {
-		database := newDatabase()
+		database, cleanDatabase := createTempFile(t, initialData)
+		defer cleanDatabase()
+
 		store := FileSystemPlayerStore{database}
 
 		got := store.GetPlayerScore("Christopher")
@@ -35,13 +44,23 @@ func TestFileSystemStore(t *testing.T) {
 	})
 }
 
-func newDatabase() io.ReadSeeker {
-	database := strings.NewReader(`[
-			{"Name": "Cleo", "Wins": 10},
-			{"Name": "Christopher", "Wins": 33}
-		]`)
+func createTempFile(t *testing.T, initialData string) (io.ReadWriteSeeker, func()) {
+	t.Helper()
 
-	return database
+	tempFile, err := ioutil.TempFile("", "db")
+
+	if err != nil {
+		t.Fatalf("could not create tmp file %v", err)
+	}
+
+	_, _ = tempFile.Write([]byte(initialData))
+
+	removeFile := func() {
+		_ = tempFile.Close()
+		_ = os.Remove(tempFile.Name())
+	}
+
+	return tempFile, removeFile
 }
 
 func assertScoreEquals(t *testing.T, got, want int) {
