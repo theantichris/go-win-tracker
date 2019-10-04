@@ -6,6 +6,9 @@ import (
 	"net/http"
 )
 
+const contentTypeHeader = "content-type"
+const jsonContentType = "application/json"
+
 type Player struct {
 	Name string
 	Wins int
@@ -36,7 +39,7 @@ func NewPlayerServer(store PlayerStore) *PlayerServer {
 }
 
 func (p *PlayerServer) leagueHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("content-type", "application/json")
+	w.Header().Set(contentTypeHeader, jsonContentType)
 	_ = json.NewEncoder(w).Encode(p.store.GetLeague())
 }
 
