@@ -1,0 +1,148 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2019-10-08T11:45:36.742Z",
+  "__export_source": "insomnia.desktop.app:v7.0.0",
+  "resources": [
+    {
+      "_id": "req_68207f2c83694dc9b4354401d2db5ce9",
+      "authentication": {},
+      "body": {},
+      "created": 1570534913466,
+      "description": "",
+      "headers": [],
+      "isPrivate": false,
+      "metaSortKey": -1570534956497,
+      "method": "GET",
+      "modified": 1570535092161,
+      "name": "/league",
+      "parameters": [],
+      "parentId": "fld_c5383aa49ba5485cb640a25f4d634c72",
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingSendCookies": true,
+      "settingStoreCookies": true,
+      "url": "{{ baseUrl }}/league",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_c5383aa49ba5485cb640a25f4d634c72",
+      "created": 1570534999562,
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1570535006029,
+      "modified": 1570535088590,
+      "name": "/league",
+      "parentId": "wrk_fa668f82b6494db080ba7d002f3a6671",
+      "_type": "request_group"
+    },
+    {
+      "_id": "wrk_fa668f82b6494db080ba7d002f3a6671",
+      "created": 1570534862288,
+      "description": "",
+      "modified": 1570534862288,
+      "name": "go-win-tracker",
+      "parentId": null,
+      "_type": "workspace"
+    },
+    {
+      "_id": "req_69e3ba1f80744300a04d6c6abf445881",
+      "authentication": {},
+      "body": {},
+      "created": 1570534956447,
+      "description": "",
+      "headers": [],
+      "isPrivate": false,
+      "metaSortKey": -1570534956547,
+      "method": "GET",
+      "modified": 1570535078985,
+      "name": "/players/{name}",
+      "parameters": [],
+      "parentId": "fld_f5d1af2f34f247b1988f18f84bfe4ea8",
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingSendCookies": true,
+      "settingStoreCookies": true,
+      "url": "{{ baseUrl  }}/players/Christopher",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_f5d1af2f34f247b1988f18f84bfe4ea8",
+      "created": 1570535005979,
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1570535005979,
+      "modified": 1570535083939,
+      "name": "/players",
+      "parentId": "wrk_fa668f82b6494db080ba7d002f3a6671",
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_bafbfb1284044a2b9d599e1616e58ba0",
+      "authentication": {},
+      "body": {},
+      "created": 1570534973249,
+      "description": "",
+      "headers": [],
+      "isPrivate": false,
+      "metaSortKey": -1570534956497,
+      "method": "POST",
+      "modified": 1570535070346,
+      "name": "/players/{name}",
+      "parameters": [],
+      "parentId": "fld_f5d1af2f34f247b1988f18f84bfe4ea8",
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingSendCookies": true,
+      "settingStoreCookies": true,
+      "url": "{{ baseUrl  }}/players/Christopher",
+      "_type": "request"
+    },
+    {
+      "_id": "env_8a149973a9b7bb62951f09311a9cff96d3dfb36f",
+      "color": null,
+      "created": 1570534862367,
+      "data": {},
+      "dataPropertyOrder": null,
+      "isPrivate": false,
+      "metaSortKey": 1570534862367,
+      "modified": 1570534862367,
+      "name": "Base Environment",
+      "parentId": "wrk_fa668f82b6494db080ba7d002f3a6671",
+      "_type": "environment"
+    },
+    {
+      "_id": "jar_8a149973a9b7bb62951f09311a9cff96d3dfb36f",
+      "cookies": [],
+      "created": 1570534862381,
+      "modified": 1570534862381,
+      "name": "Default Jar",
+      "parentId": "wrk_fa668f82b6494db080ba7d002f3a6671",
+      "_type": "cookie_jar"
+    },
+    {
+      "_id": "env_a37a8a772a134ebcbe379134c611cc80",
+      "color": "#00ff00",
+      "created": 1570534871928,
+      "data": {
+        "baseUrl": "http://localhost:5000"
+      },
+      "dataPropertyOrder": {
+        "&": [
+          "baseUrl"
+        ]
+      },
+      "isPrivate": false,
+      "metaSortKey": 1570534871928,
+      "modified": 1570534896644,
+      "name": "develop",
+      "parentId": "env_8a149973a9b7bb62951f09311a9cff96d3dfb36f",
+      "_type": "environment"
+    }
+  ]
+}
