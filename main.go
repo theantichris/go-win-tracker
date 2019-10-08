@@ -23,7 +23,17 @@ func main() {
 
 	server := NewPlayerServer(store)
 
-	if err := http.ListenAndServe(":5000", server); err != nil {
-		log.Fatalf("could not listen on port 5000 %v", err)
+	port := getPort()
+	if err := http.ListenAndServe(port, server); err != nil {
+		log.Fatalf("could not listen on port %q, %v", port, err)
 	}
+}
+
+func getPort() string {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "5000"
+	}
+
+	return ":" + port
 }
