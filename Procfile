@@ -1,1 +1,1 @@
-web: bin/webserver
+web: webserver
