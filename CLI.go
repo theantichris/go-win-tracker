@@ -8,6 +8,8 @@ import (
 	"time"
 )
 
+const PlayerPrompt = "Please enter the number of players: "
+
 // CLI interface for the poker application
 type CLI struct {
 	playerStore PlayerStore
@@ -38,7 +40,7 @@ func NewCLI(store PlayerStore, input io.Reader, output io.Writer, alerter BlindA
 
 // PlayPoker records a win for the user read from input and schedules blind alerts
 func (cli *CLI) PlayPoker() {
-	_, _ = fmt.Fprint(cli.output, "Please enter the number of players: ")
+	_, _ = fmt.Fprint(cli.output, PlayerPrompt)
 
 	cli.scheduleBlindAlerts()
 
