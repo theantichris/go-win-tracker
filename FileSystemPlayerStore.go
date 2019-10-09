@@ -7,11 +7,13 @@ import (
 	"sort"
 )
 
+// FileSystemPlayerStore saves game data to a JSON file
 type FileSystemPlayerStore struct {
 	database *json.Encoder
 	league   League
 }
 
+// NewFileSystemPlayerStore creates a new FileSystemPlayerStore
 func NewFileSystemPlayerStore(file *os.File) (*FileSystemPlayerStore, error) {
 	err := initialisePlayerDBFile(file)
 
@@ -48,6 +50,7 @@ func initialisePlayerDBFile(file *os.File) error {
 	return nil
 }
 
+// FileSystemPlayerStoreFromFile creates a FileSystemPlayerStore from a specified file
 func FileSystemPlayerStoreFromFile(path string) (*FileSystemPlayerStore, func(), error) {
 	db, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0666)
 
@@ -68,6 +71,7 @@ func FileSystemPlayerStoreFromFile(path string) (*FileSystemPlayerStore, func(),
 	return store, closeFunc, nil
 }
 
+// GetLeague returns a list of Players with scores
 func (f *FileSystemPlayerStore) GetLeague() League {
 	sort.Slice(f.league, func(i, j int) bool {
 		return f.league[i].Wins > f.league[j].Wins
@@ -76,6 +80,7 @@ func (f *FileSystemPlayerStore) GetLeague() League {
 	return f.league
 }
 
+// GetPlayerScore returns the score for the specified Player
 func (f *FileSystemPlayerStore) GetPlayerScore(name string) int {
 	player := f.league.FindPlayer(name)
 
@@ -86,6 +91,7 @@ func (f *FileSystemPlayerStore) GetPlayerScore(name string) int {
 	return 0
 }
 
+// RecordWin records a win for the specified Player
 func (f *FileSystemPlayerStore) RecordWin(name string) {
 	player := f.league.FindPlayer(name)
 

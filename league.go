@@ -6,8 +6,10 @@ import (
 	"io"
 )
 
+// League is a slice of Players
 type League []Player
 
+// FindPlayer returns the specified Player from the League
 func (l League) FindPlayer(name string) *Player {
 	for i, p := range l {
 		if p.Name == name {
@@ -18,6 +20,7 @@ func (l League) FindPlayer(name string) *Player {
 	return nil
 }
 
+// NewLeague creates a new League instance
 func NewLeague(rdr io.Reader) ([]Player, error) {
 	var league []Player
 

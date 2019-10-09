@@ -6,11 +6,13 @@ import (
 	"strings"
 )
 
+// CLI interface for the poker application
 type CLI struct {
 	playerStore PlayerStore
 	input       *bufio.Scanner
 }
 
+// NewCLI creates a new CLI instance
 func NewCLI(store PlayerStore, input io.Reader) *CLI {
 	return &CLI{
 		playerStore: store,
@@ -18,6 +20,7 @@ func NewCLI(store PlayerStore, input io.Reader) *CLI {
 	}
 }
 
+// PlayPoker records a win for the user read from input
 func (cli *CLI) PlayPoker() {
 	input := cli.readLine()
 	cli.playerStore.RecordWin(extractWinner(input))
