@@ -1,23 +1,15 @@
 package main
 
 import (
-	"github.com/theantichris/go-win-tracker"
 	"log"
 	"net/http"
 	"os"
+
+	poker "github.com/theantichris/go-win-tracker"
 )
 
-const dbFileName = "game.db.json"
-
 func main() {
-	store, closeFile, err := poker.FileSystemPlayerStoreFromFile(dbFileName)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	defer closeFile()
-
+	store := poker.NewInMemoryPlayerStore()
 	server := poker.NewPlayerServer(store)
 
 	port := getPort()
