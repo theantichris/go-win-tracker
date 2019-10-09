@@ -1,1 +1,1 @@
-web: go-win-tracker
+web: webserver
