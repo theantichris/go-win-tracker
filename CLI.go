@@ -9,6 +9,7 @@ import (
 )
 
 const PlayerPrompt = "Please enter the number of players: "
+const BadPlayerInputErrorMessage = "Bad value received for number of players, please try again with a number"
 
 // CLI interface for the poker application
 type CLI struct {
@@ -29,7 +30,7 @@ func (cli *CLI) PlayPoker() {
 	numberOfPlayers, err := strconv.Atoi(strings.Trim(numberOfPlayersInput, "\n"))
 
 	if err != nil {
-		_, _ = fmt.Fprint(cli.output, "you're so silly")
+		_, _ = fmt.Fprint(cli.output, BadPlayerInputErrorMessage)
 
 		return
 	}

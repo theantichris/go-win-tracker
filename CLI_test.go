@@ -43,7 +43,7 @@ func TestCLI(t *testing.T) {
 		}
 
 		gotPrompt := stdout.String()
-		wantPrompt := poker.PlayerPrompt + "you're so silly"
+		wantPrompt := poker.PlayerPrompt + poker.BadPlayerInputErrorMessage
 
 		if gotPrompt != wantPrompt {
 			t.Errorf("got %q want %q", gotPrompt, wantPrompt)
