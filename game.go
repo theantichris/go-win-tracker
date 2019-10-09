@@ -21,3 +21,7 @@ func (g *Game) Start(numberOfPlayers int) {
 func (g *Game) Finish(winner string) {
 	g.store.RecordWin(winner)
 }
+
+func NewGame(alerter BlindAlerter, store PlayerStore) *Game {
+	return &Game{alerter, store}
+}

@@ -12,20 +12,14 @@ const PlayerPrompt = "Please enter the number of players: "
 
 // CLI interface for the poker application
 type CLI struct {
-	playerStore PlayerStore
-	input       *bufio.Scanner
-	output      io.Writer
-	game        *Game
+	input  *bufio.Scanner
+	output io.Writer
+	game   *Game
 }
 
 // NewCLI creates a new CLI instance
-func NewCLI(store PlayerStore, input io.Reader, output io.Writer, alerter BlindAlerter) *CLI {
-	return &CLI{
-		playerStore: store,
-		input:       bufio.NewScanner(input),
-		output:      output,
-		game:        &Game{alerter, store},
-	}
+func NewCLI(input io.Reader, output io.Writer, game *Game) *CLI {
+	return &CLI{bufio.NewScanner(input), output, game}
 }
 
 func (cli *CLI) PlayPoker() {
