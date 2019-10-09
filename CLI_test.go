@@ -13,21 +13,21 @@ var dummyBlindAlerter = &SpyBlindAlerter{}
 var dummyPlayerStore = &poker.StubPlayerStore{}
 var dummyStdOut = &bytes.Buffer{}
 
-type scheduledAlert struct {
+type ScheduledAlert struct {
 	at     time.Duration
 	amount int
 }
 
-func (s scheduledAlert) String() string {
+func (s ScheduledAlert) String() string {
 	return fmt.Sprintf("%d chips at %v", s.amount, s.at)
 }
 
 type SpyBlindAlerter struct {
-	alerts []scheduledAlert
+	alerts []ScheduledAlert
 }
 
 func (s *SpyBlindAlerter) ScheduleAlertAt(duration time.Duration, amount int) {
-	s.alerts = append(s.alerts, scheduledAlert{duration, amount})
+	s.alerts = append(s.alerts, ScheduledAlert{duration, amount})
 }
 
 func TestCLI(t *testing.T) {
@@ -59,7 +59,7 @@ func TestCLI(t *testing.T) {
 		cli := poker.NewCLI(in, dummyStdOut, poker.NewGame(blindAlerter, playerStore))
 		cli.PlayPoker()
 
-		cases := []scheduledAlert{
+		cases := []ScheduledAlert{
 			{0 * time.Second, 100},
 			{9 * time.Minute, 200},
 			{18 * time.Minute, 300},
@@ -91,7 +91,7 @@ func TestCLI(t *testing.T) {
 			t.Errorf("got %q want %q", got, poker.PlayerPrompt)
 		}
 
-		cases := []scheduledAlert{
+		cases := []ScheduledAlert{
 			{0 * time.Second, 100},
 			{12 * time.Minute, 200},
 			{24 * time.Minute, 300},
@@ -111,7 +111,7 @@ func TestCLI(t *testing.T) {
 	})
 }
 
-func assertScheduledAlert(t *testing.T, got, want scheduledAlert) {
+func assertScheduledAlert(t *testing.T, got, want ScheduledAlert) {
 	t.Helper()
 
 	if got != want {
