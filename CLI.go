@@ -7,10 +7,6 @@ import (
 	"time"
 )
 
-type BlindAlerter interface {
-	ScheduleAlertAt(duration time.Duration, amount int)
-}
-
 // CLI interface for the poker application
 type CLI struct {
 	playerStore PlayerStore
@@ -37,9 +33,10 @@ func NewCLI(store PlayerStore, input io.Reader, alerter BlindAlerter) *CLI {
 	}
 }
 
-// PlayPoker records a win for the user read from input
+// PlayPoker records a win for the user read from input and schedules blind alerts
 func (cli *CLI) PlayPoker() {
 	cli.scheduleBlindAlerts()
+
 	input := cli.readLine()
 	cli.playerStore.RecordWin(extractWinner(input))
 }
