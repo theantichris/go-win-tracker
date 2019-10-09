@@ -18,6 +18,16 @@ type CLI struct {
 	alerter     BlindAlerter
 }
 
+func (cli *CLI) scheduleBlindAlerts() {
+	blinds := []int{100, 200, 300, 400, 500, 600, 800, 1000, 2000, 4000, 8000}
+	blindTime := 0 * time.Second
+
+	for _, blind := range blinds {
+		cli.alerter.ScheduleAlertAt(blindTime, blind)
+		blindTime = blindTime + 10*time.Minute
+	}
+}
+
 // NewCLI creates a new CLI instance
 func NewCLI(store PlayerStore, input io.Reader, alerter BlindAlerter) *CLI {
 	return &CLI{
@@ -29,14 +39,7 @@ func NewCLI(store PlayerStore, input io.Reader, alerter BlindAlerter) *CLI {
 
 // PlayPoker records a win for the user read from input
 func (cli *CLI) PlayPoker() {
-	blinds := []int{100, 200, 300, 400, 500, 600, 800, 1000, 2000, 4000, 8000}
-	blindTime := 0 * time.Second
-
-	for _, blind := range blinds {
-		cli.alerter.ScheduleAlertAt(blindTime, blind)
-		blindTime = blindTime + 10*time.Minute
-	}
-
+	cli.scheduleBlindAlerts()
 	input := cli.readLine()
 	cli.playerStore.RecordWin(extractWinner(input))
 }
