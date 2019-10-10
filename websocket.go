@@ -10,14 +10,24 @@ type playerServerWs struct {
 	*websocket.Conn
 }
 
-func (p *playerServerWs) WaitForMsg() string {
-	_, msg, err := p.ReadMessage()
+func (w *playerServerWs) WaitForMsg() string {
+	_, msg, err := w.ReadMessage()
 
 	if err != nil {
 		log.Printf("error reading from Websocket %v\n", err)
 	}
 
 	return string(msg)
+}
+
+func (w *playerServerWs) Write(p []byte) (n int, err error) {
+	err = w.WriteMessage(1, p)
+
+	if err != nil {
+		return 0, err
+	}
+
+	return len(p), nil
 }
 
 var wsUpgrader = websocket.Upgrader{
