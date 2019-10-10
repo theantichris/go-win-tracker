@@ -4,12 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/websocket"
-	template2 "html/template"
 	"net/http"
+	"text/template"
 )
 
 const contentTypeHeader = "content-type"
 const jsonContentType = "application/json"
+const htmlTemplatePath = "game.html"
 
 // Player stores a name with a number of wins
 type Player struct {
@@ -28,11 +29,20 @@ type PlayerStore interface {
 type PlayerServer struct {
 	store PlayerStore
 	http.Handler
+	template *template.Template
 }
 
 // NewPlayerServer creates a PlayerServer with routing configured
-func NewPlayerServer(store PlayerStore) *PlayerServer {
+func NewPlayerServer(store PlayerStore) (*PlayerServer, error) {
 	p := new(PlayerServer)
+
+	tmpl, err := template.ParseFiles("game.html")
+
+	if err != nil {
+		return nil, fmt.Errorf("problem loading template %s %v", htmlTemplatePath, err.Error())
+	}
+
+	p.template = tmpl
 	p.store = store
 
 	router := http.NewServeMux()
@@ -43,7 +53,7 @@ func NewPlayerServer(store PlayerStore) *PlayerServer {
 
 	p.Handler = router
 
-	return p
+	return p, nil
 }
 
 var wsUpgrader = websocket.Upgrader{
@@ -58,15 +68,7 @@ func (p *PlayerServer) websocketHandler(w http.ResponseWriter, r *http.Request) 
 }
 
 func (p *PlayerServer) gameHandler(w http.ResponseWriter, r *http.Request) {
-	template, err := template2.ParseFiles("game.html")
-
-	if err != nil {
-		http.Error(w, fmt.Sprintf("problem loading template %s", err.Error()), http.StatusInternalServerError)
-
-		return
-	}
-
-	_ = template.Execute(w, nil)
+	_ = p.template.Execute(w, nil)
 }
 
 func (p *PlayerServer) leagueHandler(w http.ResponseWriter, r *http.Request) {
