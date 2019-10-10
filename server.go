@@ -3,7 +3,6 @@ package poker
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gorilla/websocket"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -60,20 +59,15 @@ func NewPlayerServer(store PlayerStore, game Game) (*PlayerServer, error) {
 	return p, nil
 }
 
-var wsUpgrader = websocket.Upgrader{
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
-}
-
 func (p *PlayerServer) websocketHandler(w http.ResponseWriter, r *http.Request) {
-	conn, _ := wsUpgrader.Upgrade(w, r, nil)
+	ws := newPlayerServerWs(w, r)
 
-	_, numberOfPlayerMsg, _ := conn.ReadMessage()
-	numberOfPlayers, _ := strconv.Atoi(string(numberOfPlayerMsg))
+	numberOfPlayerMsg := ws.WaitForMsg()
+	numberOfPlayers, _ := strconv.Atoi(numberOfPlayerMsg)
 	p.game.Start(numberOfPlayers, ioutil.Discard)
 
-	_, winnerMsg, _ := conn.ReadMessage()
-	p.game.Finish(string(winnerMsg))
+	winnerMsg := ws.WaitForMsg()
+	p.game.Finish(winnerMsg)
 }
 
 func (p *PlayerServer) gameHandler(w http.ResponseWriter, r *http.Request) {
