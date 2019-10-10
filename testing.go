@@ -40,6 +40,13 @@ func NewGetScoreRequest(name string) *http.Request {
 	return req
 }
 
+// NewGetGameRequest returns a GET request for the /game endpoint
+func NewGetGameRequest() *http.Request {
+	req, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("/game"), nil)
+
+	return req
+}
+
 // NewPostWinRequest returns a POST request to add a win to the Player
 func NewPostWinRequest(name string) *http.Request {
 	request, _ := http.NewRequest(http.MethodPost, fmt.Sprintf("/players/%s", name), nil)

@@ -108,3 +108,16 @@ func TestLeague(t *testing.T) {
 		AssertContentType(t, response, jsonContentType)
 	})
 }
+
+func TestGame(t *testing.T) {
+	t.Run("GET /game returns 200", func(t *testing.T) {
+		server := NewPlayerServer(&StubPlayerStore{})
+
+		request := NewGetGameRequest()
+		response := httptest.NewRecorder()
+
+		server.ServeHTTP(response, request)
+
+		AssertStatus(t, response.Code, http.StatusOK)
+	})
+}
