@@ -32,7 +32,7 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 		response := httptest.NewRecorder()
 		server.ServeHTTP(response, NewLeagueRequest())
 
-		AssertStatus(t, response.Code, http.StatusOK)
+		AssertStatus(t, response, http.StatusOK)
 
 		got, _ := GetLeagueFromResponse(t, response.Body)
 		want := []Player{

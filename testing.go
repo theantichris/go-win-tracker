@@ -80,11 +80,11 @@ func AssertResponseBody(t *testing.T, got, want string) {
 }
 
 // AssertStatus asserts the correct status was received
-func AssertStatus(t *testing.T, got, want int) {
+func AssertStatus(t *testing.T, response *httptest.ResponseRecorder, want int) {
 	t.Helper()
 
-	if got != want {
-		t.Errorf("did not get correct status, got %d, want %d", got, want)
+	if response.Code != want {
+		t.Errorf("did not get correct status, got %d, want %d", response.Code, want)
 	}
 }
 

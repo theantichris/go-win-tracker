@@ -27,7 +27,7 @@ func TestGETPlayers(t *testing.T) {
 		got := response.Body.String()
 		want := "20"
 
-		AssertStatus(t, response.Code, http.StatusOK)
+		AssertStatus(t, response, http.StatusOK)
 		AssertResponseBody(t, got, want)
 	})
 
@@ -40,7 +40,7 @@ func TestGETPlayers(t *testing.T) {
 		got := response.Body.String()
 		want := "10"
 
-		AssertStatus(t, response.Code, http.StatusOK)
+		AssertStatus(t, response, http.StatusOK)
 		AssertResponseBody(t, got, want)
 	})
 
@@ -50,10 +50,7 @@ func TestGETPlayers(t *testing.T) {
 
 		server.ServeHTTP(response, request)
 
-		got := response.Code
-		want := http.StatusNotFound
-
-		AssertStatus(t, got, want)
+		AssertStatus(t, response, http.StatusNotFound)
 	})
 }
 
@@ -73,7 +70,7 @@ func TestStoreWins(t *testing.T) {
 
 		server.ServeHTTP(response, request)
 
-		AssertStatus(t, response.Code, http.StatusAccepted)
+		AssertStatus(t, response, http.StatusAccepted)
 		AssertPlayerWin(t, &store, player)
 
 		if len(store.winCalls) != 1 {
@@ -103,7 +100,7 @@ func TestLeague(t *testing.T) {
 		server.ServeHTTP(response, request)
 
 		got, _ := GetLeagueFromResponse(t, response.Body)
-		AssertStatus(t, response.Code, http.StatusOK)
+		AssertStatus(t, response, http.StatusOK)
 		AssertLeague(t, got, wantedLeague)
 		AssertContentType(t, response, jsonContentType)
 	})
@@ -118,6 +115,6 @@ func TestGame(t *testing.T) {
 
 		server.ServeHTTP(response, request)
 
-		AssertStatus(t, response.Code, http.StatusOK)
+		AssertStatus(t, response, http.StatusOK)
 	})
 }
