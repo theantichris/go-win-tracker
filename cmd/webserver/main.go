@@ -10,7 +10,12 @@ import (
 
 func main() {
 	store := poker.NewInMemoryPlayerStore()
-	server := poker.NewPlayerServer(store)
+	game := poker.NewTexasHoldem(poker.BlindAlerterFunc(poker.Alerter), store)
+	server, err := poker.NewPlayerServer(store, game)
+
+	if err != nil {
+		log.Fatalf("problem creating server %v", err)
+	}
 
 	port := getPort()
 	if err := http.ListenAndServe(port, server); err != nil {

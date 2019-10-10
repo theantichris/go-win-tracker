@@ -50,13 +50,13 @@ func TestGame_Start(t *testing.T) {
 }
 
 func TestGame_Finish(t *testing.T) {
-	store := &poker.StubPlayerStore{}
+	store := &StubPlayerStore{}
 	game := poker.NewTexasHoldem(dummyBlindAlerter, store)
 	winner := "Ruth"
 
 	game.Finish(winner)
 
-	poker.AssertPlayerWin(t, store, winner)
+	AssertPlayerWin(t, store, winner)
 }
 
 func checkSchedulingCases(t *testing.T, cases []ScheduledAlert, blindAlerter *SpyBlindAlerter) {

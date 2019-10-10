@@ -1,7 +1,8 @@
-package poker
+package poker_test
 
 import (
 	"fmt"
+	poker "github.com/theantichris/go-win-tracker"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -13,7 +14,7 @@ import (
 type StubPlayerStore struct {
 	scores   map[string]int
 	winCalls []string
-	league   League
+	league   poker.League
 }
 
 // GetPlayerScore gets the Player's score
@@ -29,7 +30,7 @@ func (s *StubPlayerStore) RecordWin(name string) {
 }
 
 // GetLeague returns a list of Players and their scores
-func (s *StubPlayerStore) GetLeague() League {
+func (s *StubPlayerStore) GetLeague() poker.League {
 	return s.league
 }
 
@@ -62,10 +63,10 @@ func NewLeagueRequest() *http.Request {
 }
 
 // GetLeagueFromResponse returns a league from a response body
-func GetLeagueFromResponse(t *testing.T, body io.Reader) ([]Player, error) {
+func GetLeagueFromResponse(t *testing.T, body io.Reader) ([]poker.Player, error) {
 	t.Helper()
 
-	league, err := NewLeague(body)
+	league, err := poker.NewLeague(body)
 
 	return league, err
 }
@@ -89,7 +90,7 @@ func AssertStatus(t *testing.T, response *httptest.ResponseRecorder, want int) {
 }
 
 // AssertLeague asserts the correct data was returned for the league
-func AssertLeague(t *testing.T, got, want []Player) {
+func AssertLeague(t *testing.T, got, want []poker.Player) {
 	t.Helper()
 
 	if !reflect.DeepEqual(got, want) {
@@ -101,7 +102,7 @@ func AssertLeague(t *testing.T, got, want []Player) {
 func AssertContentType(t *testing.T, response *httptest.ResponseRecorder, want string) {
 	t.Helper()
 
-	if response.Result().Header.Get(contentTypeHeader) != want {
+	if response.Result().Header.Get(poker.ContentTypeHeader) != want {
 		t.Errorf("response did not have content-type of application/json, got %v", response.Result().Header)
 	}
 }

@@ -1,6 +1,7 @@
-package poker
+package poker_test
 
 import (
+	poker "github.com/theantichris/go-win-tracker"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -10,11 +11,11 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 	database, cleanDatabase := createTempFile(t, `[]`)
 	defer cleanDatabase()
 
-	store, err := NewFileSystemPlayerStore(database)
+	store, err := poker.NewFileSystemPlayerStore(database)
 
 	assertNoError(t, err)
 
-	server, _ := NewPlayerServer(store)
+	server, _ := poker.NewPlayerServer(store, dummyGame)
 	player := "Pepper"
 
 	server.ServeHTTP(httptest.NewRecorder(), NewPostWinRequest(player))
@@ -35,7 +36,7 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 		AssertStatus(t, response, http.StatusOK)
 
 		got, _ := GetLeagueFromResponse(t, response.Body)
-		want := []Player{
+		want := []poker.Player{
 			{player, 3},
 		}
 

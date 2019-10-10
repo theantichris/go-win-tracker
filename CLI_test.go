@@ -20,10 +20,7 @@ func TestCLI(t *testing.T) {
 		cli.PlayPoker()
 
 		assertMessagesSentToUser(t, stdout, poker.PlayerPrompt)
-
-		if game.StartedWith != 7 {
-			t.Errorf("wanted game to start with %d players got %d players", 7, game.StartedWith)
-		}
+		assertGameStartedWith(t, game, 7)
 	})
 
 	t.Run("it prints an error when a non numeric value is entered and does not start the game", func(t *testing.T) {
@@ -43,12 +40,12 @@ func TestCLI(t *testing.T) {
 }
 
 var dummyBlindAlerter = &SpyBlindAlerter{}
-var dummyPlayerStore = &poker.StubPlayerStore{}
+var dummyPlayerStore = &StubPlayerStore{}
 
 type GameSpy struct {
-	StartedWith  int
-	StartCalled  bool
-	FinishedWith string
+	StartedWith      int
+	StartCalled      bool
+	FinishCalledWith string
 }
 
 func (g *GameSpy) Start(numberOfPlayers int, alertsDestination io.Writer) {
@@ -57,7 +54,7 @@ func (g *GameSpy) Start(numberOfPlayers int, alertsDestination io.Writer) {
 }
 
 func (g *GameSpy) Finish(winner string) {
-	g.FinishedWith = winner
+	g.FinishCalledWith = winner
 }
 
 type ScheduledAlert struct {
@@ -93,5 +90,18 @@ func assertMessagesSentToUser(t *testing.T, stdout *bytes.Buffer, messages ...st
 
 	if got != want {
 		t.Errorf("got %q sent to stdout but expected %+v", got, messages)
+	}
+}
+
+func assertGameStartedWith(t *testing.T, game *GameSpy, want int) {
+	if game.StartedWith != want {
+		t.Errorf("wanted game to start with %d players got %d players", want, game.StartedWith)
+	}
+}
+
+func assertFinishCalledWith(t *testing.T, game *GameSpy, winner string) {
+	t.Helper()
+	if game.FinishCalledWith != winner {
+		t.Errorf("expected finish called with %q but got %q", winner, game.FinishCalledWith)
 	}
 }

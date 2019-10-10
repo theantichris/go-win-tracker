@@ -4,13 +4,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/websocket"
+	"io/ioutil"
 	"net/http"
+	"strconv"
 	"text/template"
 )
 
-const contentTypeHeader = "content-type"
-const jsonContentType = "application/json"
-const htmlTemplatePath = "game.html"
+const ContentTypeHeader = "content-type"
+const JsonContentType = "application/json"
+const HtmlTemplatePath = "game.html"
 
 // Player stores a name with a number of wins
 type Player struct {
@@ -30,20 +32,22 @@ type PlayerServer struct {
 	store PlayerStore
 	http.Handler
 	template *template.Template
+	game     Game
 }
 
 // NewPlayerServer creates a PlayerServer with routing configured
-func NewPlayerServer(store PlayerStore) (*PlayerServer, error) {
+func NewPlayerServer(store PlayerStore, game Game) (*PlayerServer, error) {
 	p := new(PlayerServer)
 
 	tmpl, err := template.ParseFiles("game.html")
 
 	if err != nil {
-		return nil, fmt.Errorf("problem loading template %s %v", htmlTemplatePath, err.Error())
+		return nil, fmt.Errorf("problem loading template %s %v", HtmlTemplatePath, err.Error())
 	}
 
 	p.template = tmpl
 	p.store = store
+	p.game = game
 
 	router := http.NewServeMux()
 	router.Handle("/game", http.HandlerFunc(p.gameHandler))
@@ -63,8 +67,13 @@ var wsUpgrader = websocket.Upgrader{
 
 func (p *PlayerServer) websocketHandler(w http.ResponseWriter, r *http.Request) {
 	conn, _ := wsUpgrader.Upgrade(w, r, nil)
+
+	_, numberOfPlayerMsg, _ := conn.ReadMessage()
+	numberOfPlayers, _ := strconv.Atoi(string(numberOfPlayerMsg))
+	p.game.Start(numberOfPlayers, ioutil.Discard)
+
 	_, winnerMsg, _ := conn.ReadMessage()
-	p.store.RecordWin(string(winnerMsg))
+	p.game.Finish(string(winnerMsg))
 }
 
 func (p *PlayerServer) gameHandler(w http.ResponseWriter, r *http.Request) {
@@ -72,7 +81,7 @@ func (p *PlayerServer) gameHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (p *PlayerServer) leagueHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set(contentTypeHeader, jsonContentType)
+	w.Header().Set(ContentTypeHeader, JsonContentType)
 	_ = json.NewEncoder(w).Encode(p.store.GetLeague())
 }
 
