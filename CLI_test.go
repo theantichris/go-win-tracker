@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	poker "github.com/theantichris/go-win-tracker"
+	"io"
 	"strings"
 	"testing"
 	"time"
@@ -72,7 +73,7 @@ type SpyBlindAlerter struct {
 	alerts []ScheduledAlert
 }
 
-func (s *SpyBlindAlerter) ScheduleAlertAt(duration time.Duration, amount int) {
+func (s *SpyBlindAlerter) ScheduleAlertAt(duration time.Duration, amount int, to io.Writer) {
 	s.alerts = append(s.alerts, ScheduledAlert{duration, amount})
 }
 

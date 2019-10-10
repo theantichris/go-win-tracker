@@ -1,6 +1,9 @@
 package poker
 
-import "time"
+import (
+	"os"
+	"time"
+)
 
 type Game interface {
 	Start(numberOfPlayers int)
@@ -18,7 +21,7 @@ func (g *TexasHoldem) Start(numberOfPlayers int) {
 	blindTime := 0 * time.Second
 
 	for _, blind := range blinds {
-		g.alerter.ScheduleAlertAt(blindTime, blind)
+		g.alerter.ScheduleAlertAt(blindTime, blind, os.Stdout)
 		blindTime = blindTime + blindIncrement
 	}
 }
